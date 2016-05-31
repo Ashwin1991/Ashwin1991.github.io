@@ -38,12 +38,13 @@ table  th {
 #sections {
   width: 340px;
   float: left;
+  padding-left: .9375rem;
 }
 
 #sections > div {
   background: white;
   opacity: .2;
-  margin-bottom:100px;
+  margin-bottom:50px;
 }
 
 #sections > div.graph-scroll-active {
@@ -53,19 +54,21 @@ table  th {
 
 #graph{
   float: left;
-  margin-left: 40px;
+  margin-left: 200px;
 }
 
 #graph.graph-scroll-fixed{
   position: fixed;
   top: 100px;
-  margin-left: 380px;
+  margin-left: 540px;
+  float: right;
 }
 
 #graph.graph-scroll-below {
   position: absolute;
-  bottom: 100px;
-  margin-left: 380px;
+  bottom: 50px;
+  margin-left: 540px;
+  float: right;
 }
 
 circle {
