@@ -21,6 +21,7 @@
     <!-- Custom styles for DataVis -->
     <link href="css/datavis.css" rel="stylesheet">
     <!-- end of Added for Interactive DataVis -->
+
   </head>
   <body>
 
@@ -41,7 +42,7 @@
       <div class="carousel-inner" role="listbox">
         <div class="carousel-item active">
           <img class="first-slide" src="imgs/africa4.jpg" alt="First slide">
-          <div class="container">
+          <div class="container_lol">
             <div class="carousel-caption text-xs-left">
               <h1>Research Problem</h1>
               <p>Predicting the operating condition of waterpoints as - functional, functional needs repair, or not functional - across Tanzania with the given set of variables corresponding to each waterpoint.</p>
@@ -51,7 +52,7 @@
         </div>
         <div class="carousel-item">
           <img class="second-slide" src="imgs/africa_pump2.jpg" alt="Second slide">
-          <div class="container">
+          <div class="container_lol">
             <div class="carousel-caption">
               <h1>Taarifa</h1>
               <p>Taarifa is an open source platform for the crowd sourced reporting and triaging of infrastructure related issues.
@@ -63,7 +64,7 @@
         </div>
         <div class="carousel-item">
           <img class="third-slide" src="imgs/slide3.jpg" alt="Third slide">
-          <div class="container">
+          <div class="container_lol">
             <div class="carousel-caption text-xs-right">
               <h1>Do your bit!</h1>
               <p>Exercise your knowledge and skills by participating in this crowd-sourced data science competition hosted by DrivenData.org. Help out folks at Taarifa.</p>
@@ -85,9 +86,9 @@
 
     <!-- Marketing messaging and featurettes
     ================================================== -->
-    <!-- Wrap the rest of the page in another container to center all the content. -->
+    <!-- Wrap the rest of the page in another container_lol to center all the content. -->
 
-    <div class="container marketing">
+    <div class="container_lol marketing">
 
       <!-- Three columns of text below the carousel -->
 	  <h3 align="center" style="padding-bottom:2rem; padding-right:3rem;"><u><i>The Team</i></u></h3>
@@ -96,7 +97,7 @@
 		<div class="col-lg-4">
           <img class="img-circle" src="imgs/wenhong.jpg" width="150" height="150">
           <h2>Wenhong Cao</h2>
-          <p>caowenhong@hotmail.com</p>
+          <p>wcao@uw.edu</p>
           <!--<p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>-->
         </div>
         <div class="col-lg-4">
@@ -146,7 +147,7 @@
 
       <hr class="featurette-divider">
 
-      <div class="row featurette">
+            <div class="row featurette">
         <div class="col-md-7">
           <h2 class="featurette-heading">Exploratory Data Analysis</span></h2>
         </div>
@@ -154,10 +155,10 @@
           <!--<img class="featurette-image img-fluid center-block" data-src="holder.js/500x500/auto" alt="Generic placeholder image">-->
         </div>
         <!-- Added for Interactive DataVis -->
-        <div id='container_vis'>
-        <div id='sections_vis'>
+        <div id='container'>
+        <div id='sections'>
           <div><!--0-->
-          <h3></h3>
+          <h2 class="featurette-heading"><span class="text-muted">Waterpoints by Operational Status</span></h2>
           <p class="lead">The majority of wells, 54.31% are categorized as functional, followed by 38.42% non-functional wells, with a small proportion 7.27% of wells needing repair.</p>
           <p></p>
             <table align="center" border=1 >
@@ -210,12 +211,13 @@
 
           <!--1-->
           <div>
-            <h2 class="featurette-heading">Operational Status by Construction Year</h2>
-            Newer wells tend to show a higher proportion of functional status and older wells tend to have higher proportions of non-functional status. What is somewhat surprising is that wells in need of repair do not show a clear pattern with respect to year built. We also note that the time in which the proportion of functional to non-functional wells intersect is between 1985 and 1990, possibly indicating that an average well life may be around 25 years
+            <h2 class="featurette-heading"><span class="text-muted">Operational Status by Construction Year</span></h2>
+            For temporal trends, we examined operational status by construction year.  Newer wells tend to show a higher proportion of functional status and older wells tend to have higher proportions of non-functional status. What is somewhat surprising is that wells in need of repair do not show a clear pattern with respect to year built. We also note that the time in which the proportion of functional to non-functional wells intersect is between 1985 and 1990, possibly indicating that an average well life may be around 25 years
           </div>
         </div>
 
         <div id='graph'></div>
+
       </div>
        <!-- end of Added for Interactive DataVis -->
       </div>
@@ -253,7 +255,7 @@
         <!--<p>&copy; 2014 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>-->
       </footer>
 
-    </div><!-- /.container -->
+    </div><!-- /.container_lol -->
 
 
     <!-- Bootstrap core JavaScript
@@ -270,7 +272,7 @@
     <script src="js/d3.v3.js"></script>
     <script src="js/graph-scroll.js"></script>
     <script type="text/javascript" src="js/datasciWater_module.js"></script>
-     <!-- end of Added for Interactive DataVis -->
+    <!-- end of Added for Interactive DataVis -->
 
   </body>
 </html>

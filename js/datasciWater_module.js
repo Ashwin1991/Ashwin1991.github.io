@@ -43,7 +43,8 @@ var svg = d3.select("#graph")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 //add tooltip for hover event
-var tooltip = d3.select("#graph").append("div") 
+var tooltip;
+tooltip = d3.select("#graph").append("div") 
 .attr("class", "tooltip")
 .style("opacity", 0);
 
@@ -53,7 +54,7 @@ var x = d3.scale.linear()
         .range([0, width]);
 
 var y = d3.scale.linear()
-        .domain([0, 2050])
+        .domain([0, 2070])
         .range([height2, 0]);
 
 function drawVis(data) {
@@ -82,21 +83,29 @@ function drawVis(data) {
     .on("mouseover", function(d) {
         svg.selectAll('circle')
         .filter(function (dOther) { return d.status_id == dOther.status_id })
-        .style('fill-opacity', 0.8)
+        .style('opacity', 1.0)
+        //.attr("r",function(dLast) { if(dLast.count>0 && dLast.count<=200) { return 6;} else if(dLast.count>200 && dLast.count<1300) {return dLast.count * .030;} else {return dLast.count * .018;}})
         .attr("r",function(dLast) { if(dLast.count>0 && dLast.count<=200) { return 6;} else if(dLast.count>200 && dLast.count<1350) {return dLast.count * .018;} else {return dLast.count * .011;}})
-        .style("stroke-width", "1.5px")
-        .style("stroke", function(d) {if(d.status_id== 0) { return "green";} else if(d.status_id== 1) { return "orange";} else if(d.status_id== 2) { return "red";} })
-    
-    })
+
+        tooltip.transition()
+        .duration(200)
+        .style("opacity", .9);
+        //.text("hello")
+        tooltip.html("Year: " + d.year + "<br> Status: " + d.Status + "<br> Count: " + d.count)
+        .style("left", "75px") //(d3.event.pageX - 75) + "px")
+        .style("top", "75px") //(d3.event.pageY - 75) + "px")
+        })
+
     .on("mouseout", function(d) {
         svg.selectAll('circle')
         .filter(function (dOther) { return d.status_id == dOther.status_id })
-        .style('fill-opacity', 0.6)
-        .attr("r",function(dLast) { if(dLast.count>0 && dLast.count<=200) { return 3;} else if(dLast.count>200 && dLast.count<1350) {return dLast.count * .015;} else {return dLast.count * .01;}})
-        .style("stroke-width", "1.5px")
-        .style("stroke", function(d) {if(d.status_id== 0) { return "green";} else if(d.status_id== 1) { return "orange";} else if(d.status_id== 2) { return "red";} })
-    
-    }) 
+        .style('opacity', 0.6)
+        //    .attr("r",function(dLast) { if(dLast.count>0 && dLast.count<=200) { return 3;} else if(dLast.count>200 && dLast.count<1300) {return dLast.count * .015;} else {return dLast.count * .012;}})
+        .attr("r", function(d) { if(d.count>0 && d.count<=200) { return 3;} else if(d.count>200 && d.count<1350) {return d.count * .015;} else {return d.count * .01;}});
+        tooltip.transition()
+        .duration(500)
+        .style("opacity", 0)
+        }) 
 
 }
 
@@ -131,12 +140,6 @@ svg.append("g")
       .text("Count");
 
 
-
-
-
-
-
-
 // Update function
 var update = function(value) {
   switch(value) {
@@ -151,8 +154,11 @@ var update = function(value) {
           
            water.forEach(function(d) {
               d.Year = +d.year;
-              d.Status_id=+d.status_id
+              d.Status_id=+d.status_id;
               d.Value = +d.count;
+              var status_value;
+              if (d.status_id==0) {status_value = "functional"} else if (d.status_id==1) {status_value =  "needs repairs"} else {status_value=  "non-functional"};
+              d.Status = status_value;
            });
          dataset=water;
          //initVis(dataset);
@@ -190,9 +196,9 @@ var update = function(value) {
 
 //******* Graph Scroll
 var gs = graphScroll()
-    .container(d3.select('#container_vis'))
+    .container(d3.select('#container'))
     .graph(d3.selectAll('#graph'))
-    .sections(d3.selectAll('#sections_vis > div'))
+    .sections(d3.selectAll('#sections > div'))
     .on('active', function(i){
       console.log(i + 'th section active');
 
@@ -200,18 +206,15 @@ var gs = graphScroll()
                   {cx: r,                 cy: r},
                   {cx: width - r, cy: height2 - r},
                   {cx: width/2,   cy: height2/2} ][i]
-      /*if (i>0) 
-        {update(i+1)} 
-      else
-        {update()};*/
+
       if (i>0) {console.log("updating: ", i); update(i)};
       
       });
 
 
 //the end
-d3.select('#source')
-    .style({'margin-bottom': window.innerHeight - 500 + 'px', padding: '100px'})
+/*d3.select('#source')
+    .style({'margin-bottom': window.innerHeight - 500 + 'px', padding: '100px'})*/
 
 
 //************************************ Part 3 - Filter for animation ************************************////
@@ -259,7 +262,6 @@ var circleText_setup = function(text) {
 
 // Reusable drawing function
 var draw = function(data) {
-  //console.log("inside draw: " + data)
   // Bind self.settings.data
   var circles = svg.selectAll('circle').data(data)
 
@@ -272,31 +274,5 @@ var draw = function(data) {
   // Transition all circles to new dself.settings.data
   svg.selectAll('circle').transition().duration(1500).call(circle_setup)  
 }
-var label = function(data) {
-  //console.log("inside draw: " + data)
-  // Bind self.settings.data
-  var labels = svg.selectAll('text').data(data)
-
-  // Enter new elements
-  labels.enter().append('text').call(circleText_setup)
-
-  // Exit elements that may have left
-  labels.exit().remove()
-
-  // Transition all circles to new dself.settings.data
-  svg.selectAll('text').transition().duration(1500).call(circleText_setup)  
-}
-
-//tooltip hover
-//on mouse over - tooltip with data
-    .on("mouseover", function(d) { tooltip.transition()
-    .duration(200)
-    .style("opacity", .9);
-    tooltip.html(d.year + ": " + d.status_id + "," + d.count)
-    .style("left", (d3.event.pageX - 125) + "px")
-    .style("top", (d3.event.pageY - 28) + "px"); })
-    .on("mouseout", function(d) { tooltip.transition()
-    .duration(500)
-    .style("opacity", 0); })
 
 */
