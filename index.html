@@ -16,6 +16,12 @@
 
     <!-- Custom styles for this template -->
     <link href="css/carousel.css" rel="stylesheet">
+
+    <!-- Added for Interactive DataVis -->
+    <!-- Custom styles for DataVis -->
+    <link href="css/datavis.css" rel="stylesheet">
+    <!-- end of Added for Interactive DataVis -->
+
   </head>
   <body>
 
@@ -119,7 +125,7 @@
 
       <div class="row featurette">
         <div class="col-md-7">
-          <h2 class="featurette-heading">Abstract.<!--<span class="text-muted">It'll blow your mind.</span>--></h2>
+          <h2 class="featurette-heading">Abstract<!--<span class="text-muted">It'll blow your mind.</span>--></h2>
           <p class="lead">This abstract summarizes our entry in an online data science competition on DrivenData.org called “Pump it Up: Data Mining the Water Table”. The goal of the competition is to predict the status of water wells in Tanzania. Using the original datasets from the competition, we applied a set of classifiers including k-nearest neighbor, support vector machines, Naive Bayes, Decision trees, and Logistic regression with varying degrees of success. Ultimately, an ensemble classifier produced our best prediction score of 0.8213, placing us 34th out of 1550 teams on the Pump it Up Data science competition leaderboard as of May 25, 2016.</p>
         </div>
         <!--<div class="col-md-5">
@@ -141,14 +147,100 @@
 
       <hr class="featurette-divider">
 
-      <div class="row featurette">
+            <div class="row featurette">
         <div class="col-md-7">
-          <h2 class="featurette-heading">Interactive tree <span class="text-muted">of waterpoints across districts by status.</span></h2>
-          <p class="lead">Description for the viz lives here.</p>
+          <h2 class="featurette-heading">Exploratory Data Analysis</span></h2>
         </div>
         <div class="col-md-5">
           <!--<img class="featurette-image img-fluid center-block" data-src="holder.js/500x500/auto" alt="Generic placeholder image">-->
-		  <h1>Viz lives here!</h1>
+        </div>
+        <!-- Added for Interactive DataVis -->
+        <div id='container'>
+        <div id='sections'>
+          <div><!--0-->
+          <h2 class="featurette-heading"><span class="text-muted">Waterpoints by Operational Status</span></h2>
+          <p class="lead">The majority of wells, 54.31% are categorized as functional, followed by 38.42% non-functional wells, with a small proportion 7.27% of wells needing repair.</p>
+          <p></p>
+            <table align="center" border=1 >
+            <tr bgcolor="orange">
+              <td width="50%">
+                Status
+              </td>
+              <td>
+                Count
+              </td>
+              <td>
+                %
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Functional
+              </td>
+              <td>
+                32259
+              </td>
+              <td>
+                54.31%
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Non-functional
+              </td>
+              <td>
+                22824
+              </td>
+              <td>
+                38.42%
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Functional needs repair
+              </td>
+              <td>
+                4317
+              </td>
+              <td>
+                7.27%
+              </td>
+            </tr>
+          </table>
+          </div>
+
+          <!--1-->
+          <div>
+            <h2 class="featurette-heading"><span class="text-muted">Operational Status by Construction Year</span></h2>
+            For temporal trends, we examined operational status by construction year.  Newer wells tend to show a higher proportion of functional status and older wells tend to have higher proportions of non-functional status. What is somewhat surprising is that wells in need of repair do not show a clear pattern with respect to year built. We also note that the time in which the proportion of functional to non-functional wells intersect is between 1985 and 1990, possibly indicating that an average well life may be around 25 years
+          </div>
+        </div>
+
+        <div id='graph'></div>
+
+      </div>
+       <!-- end of Added for Interactive DataVis -->
+      </div>
+
+      <hr class="featurette-divider">
+
+      <div class="row featurette">
+        <div class="col-md-7">
+          <h2 class="featurette-heading">Results <span class="text-muted">as seen through ROC curves</span></h2>
+		  <img class="featurette-image img-fluid center-block" src="imgs/rocs.jpg" alt="Generic placeholder image">
+		  <!--<div class="col-lg-4">
+          <p>Test</p>
+		  </div>
+		  <div class="col-lg-4">
+          <p>Test</p>
+		  </div>
+		  <div class="col-lg-4">
+          <p>Test</p>
+		  </div>-->
+          <p class="lead">Description for the ROCs lives here.</p>
+        </div>
+        <div class="col-md-5">
+          <!--<img class="featurette-image img-fluid center-block" data-src="holder.js/500x500/auto" alt="Generic placeholder image">-->
         </div>
       </div>
 
@@ -198,5 +290,11 @@
     <script src="js/holder.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="js/ie10-viewport-bug-workaround.js"></script>
+    <!-- Added for Interactive DataVis -->
+    <script src="js/d3.v3.js"></script>
+    <script src="js/graph-scroll.js"></script>
+    <script type="text/javascript" src="js/datasciWater_module.js"></script>
+    <!-- end of Added for Interactive DataVis -->
+
   </body>
 </html>
