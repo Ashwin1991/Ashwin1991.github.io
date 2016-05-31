@@ -696,39 +696,39 @@ pre code {
     overflow-y: scroll
 }
 
-.container {
+.container_lol {
     padding-right: .9375rem;
     padding-left: .9375rem;
     margin-right: auto;
     margin-left: auto
 }
 
-.container::after {
+.container_lol::after {
     display: table;
     clear: both;
     content: ""
 }
 
 @media (min-width: 544px) {
-    .container {
+    .container_lol {
         max-width:576px
     }
 }
 
 @media (min-width: 768px) {
-    .container {
+    .container_lol {
         max-width:720px
     }
 }
 
 @media (min-width: 992px) {
-    .container {
+    .container_lol {
         max-width:940px
     }
 }
 
 @media (min-width: 1200px) {
-    .container {
+    .container_lol {
         max-width:1140px
     }
 }
