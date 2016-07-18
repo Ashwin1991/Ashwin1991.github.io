@@ -1,6 +1,5 @@
-/* <!--project: my Perceptron - Anya Chaliotis -->
-<!--work for UW, iSchool, INFX598 Advanced Data Vis, taught by Jessica Hullman -->
-<!--inspired by INFX574 DataSciII, taught by Joshua Blumenstock --> */
+/* DataDriven.org project: Water in Tanzania
+work for UW, iSchool, INFX575 DataSci3, taught by Jevin West */
 
 //************************************ Part 0. Global variables ************************************//
 var width = 500,
@@ -9,20 +8,10 @@ var width = 500,
     r = 29;
 var margin = {top: 20, right: 20, bottom: 30, left: 50};
 
-//circle settings
-//var radius  = 29 //default radius
-
-// prepare html needs
-// set margins
-//was, now
-//var margin = {top: 20, right: 20, bottom: 30, left: 50};
-//    var w = 960 - margin.left - margin.right;
-//    var h = 500 - margin.top - margin.bottom;
-
 //datasets and data structures
-var dataset; //to hold full dataset, summarized datasets
+var dataset, datasetMetrics1; //to hold full dataset, summarized datasets
 var years = [];
-var circles;
+var circles, bars;
 
 //init axes variables
 var minYear, maxYear, maxYear_axes, y_min, y_dynamic_max ; 
@@ -48,16 +37,133 @@ tooltip = d3.select("#graph").append("div")
 .attr("class", "tooltip")
 .style("opacity", 0);
 
-//add main svg elements
-var x = d3.scale.linear()
-        .domain([minYear-1, maxYear_axes])
-        .range([0, width]);
+//Plot #1 - Barplot that shows waterpoints by operational status
+function drawVis_barplot(data) {
+  //clear canvas
+  svg.selectAll("*").remove();
 
-var y = d3.scale.linear()
-        .domain([0, 2070])
-        .range([height2, 0]);
+  //scale for barplot
+  var xScale = d3.scale.ordinal()
+      .rangeRoundBands([0, width], .2);
 
-function drawVis(data) {
+  var yScale = d3.scale.linear()
+      .range([height2, 0]);
+
+  var xAxis = d3.svg.axis()
+      .scale(xScale)
+      .orient("bottom");
+
+  var yAxis = d3.svg.axis()
+      .scale(yScale)
+      .orient("left")
+      .ticks(10);
+
+  xScale.domain(data.map(function(d) { return d.status_value; }));
+  yScale.domain([0, d3.max(data, function(d) { return Math.ceil(d.count/5000)*5000; })]);
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height2 + ")")
+      .call(xAxis);
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Frequency");
+
+  //draw data driven bars
+  bars = svg.selectAll(".bar")
+    .data(data)
+
+    // Add new bars 
+    bars.enter().append("rect"); 
+   // Remove bars 
+    bars.exit().remove();
+
+   bars
+    .attr("class", "bar")
+    .attr("x", function(d) { return xScale(d.status_value); })
+    .attr("width", xScale.rangeBand())
+    .attr("y", function(d) { return yScale(d.count); })
+    .attr("height", function(d) { return height2 - yScale(d.count); })
+    .style("fill", function(d) { if(d.status_id== 0) { return "green";} else if(d.status_id== 1) { return "yellow";} else if(d.status_id== 2) { return "red";} })
+    .style("fill-opacity", 0.7)
+    //.style("stroke", "black")
+    .style("stroke-width", "1.5px")
+    .style("stroke", function(d) {if(d.status_id== 0) { return "green";} else if(d.status_id== 1) { return "orange";} else if(d.status_id== 2) { return "red";} })
+    
+    .on("mouseover", function(d) {
+      svg.selectAll('rect')
+      .filter(function (dOther) { return d.status_id == dOther.status_id }) 
+      .style('opacity', 1.0)
+        
+      tooltip.transition()
+      .duration(200)
+      .style("opacity", .9);
+      tooltip.html(d.count + " waterpoints")
+      .style("left", xScale(d.status_value) + width/(2*data.length) - 20 + "px") //(d3.event.pageX - 125) + "px")
+      .style("top", yScale(d.count) + "px")}) //(d3.event.pageY - 28) + "px")})
+
+    .on("mouseout", function(d) {
+      svg.selectAll('rect')
+      .filter(function (dOther) { return d.status_id == dOther.status_id })
+      .style('opacity', 0.7) 
+
+      tooltip.transition()
+        .duration(500)
+        .style("opacity", 0) });
+
+}      
+
+//Plot #2 - Scatterplot that shows waterpoints by construction year, color-coded with operational status
+function drawVis_scatter(data) {
+  //clear canvas
+  svg.selectAll("*").remove();
+
+  //scale for scatterplot
+  var x = d3.scale.linear()
+          .domain([minYear-1, maxYear_axes])
+          .range([0, width]);
+
+  var y = d3.scale.linear()
+          .domain([0, 2070])
+          .range([height2, 0]);
+  
+  var xAxis = d3.svg.axis()
+      .scale(x)
+      .orient("bottom")
+      .ticks(10)
+      .tickFormat(d3.format("i"));
+
+  svg.append("g")
+      .attr("class", "axis")
+      .attr("transform", "translate(0," + height2 + ")")
+      .call(xAxis)
+       .append("text")
+        .attr("x", width - 200)
+        .attr("y", +30)
+        .style("text-anchor", "end")
+        .text("Construction Year");
+
+  var yAxis = d3.svg.axis()
+      .scale(y)
+      .orient("left");
+
+  svg.append("g")
+     .attr("class", "axis")
+     .call(yAxis)
+        .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text("Count"); 
+
   circles = svg.selectAll("circle")
    .data(data)
 
@@ -109,43 +215,74 @@ function drawVis(data) {
 
 }
 
-var xAxis = d3.svg.axis()
-    .scale(x)
-    .orient("bottom")
-    .ticks(10)
-    .tickFormat(d3.format("i"));
-
-svg.append("g")
-    .attr("class", "axis")
-    .attr("transform", "translate(0," + height2 + ")")
-    .call(xAxis)
-     .append("text")
-      .attr("x", width - 200)
-      .attr("y", +30)
-      .style("text-anchor", "end")
-      .text("Construction Year");
-
-var yAxis = d3.svg.axis()
-    .scale(y)
-    .orient("left");
-
-svg.append("g")
-   .attr("class", "axis")
-   .call(yAxis)
-      .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", ".71em")
-      .style("text-anchor", "end")
-      .text("Count");
-
+//clear canvas
+function drawNothing(){
+  svg.selectAll("*").remove();
+}
 
 // Update function
 var update = function(value) {
   switch(value) {
-    case 1:
-      console.log ('inside case 1')
-      state_original=1;
+
+   case 0:
+    console.log ('inside case 0')
+    //clear canvas
+    drawNothing();
+    break;
+    
+   case 1:
+    console.log ('inside case 1')
+    // load data from csv file
+    d3.csv("data/water_full.csv", function(error, water) {
+      
+      //read in the data - original dataset
+      if (error) return console.warn(error);
+        
+       water.forEach(function(d) {
+          d.Year = +d.year;
+          d.Status_id=+d.status_group_id;
+          d.Status_value = d.status_group;   
+          /*var status_value;
+          if (d.status_id==0) {status_value = "functional"} else if (d.status_id==1) {status_value =  "needs repairs"} else {status_value=  "non-functional"};
+          d.Status = status_value;*/
+       });
+       dataset=water;
+       
+       //group values by status
+       var datasetAggr1 = d3.nest()
+        .key(function(d) { return d.Status_id; })
+        .rollup(function(v) { return v.length}) 
+        .entries(dataset);
+        //console.log("aggr:", JSON.stringify(datasetAggr1));
+
+       //Flatten rolled up dataset(s)
+       function flattenNested1(dataset) {
+        var newData = [];
+        var v_status_value;
+        
+        dataset.forEach(function(d) {
+          console.log("forEach1" + d.key + d.values);
+          if (d.key==0) { v_status_value="functional"} else if (d.key==1) {v_status_value="needs-repairs"} else {v_status_value="non-functional"};
+            newData.push({
+                status_id: d.key,
+                count: d.values,
+                status_value: v_status_value
+              });
+        });
+        return newData;
+      }
+
+      //populate dataset1 tidy - waterpoints aggregated by status
+      datasetMetrics1= flattenNested1(datasetAggr1);
+
+      //draw plot
+      drawVis_barplot(datasetMetrics1);
+      
+    });
+    break;
+
+    case 2:
+      console.log ('inside case 2')
       // load data from csv file
       d3.csv("data/dynamic_water_status_byYear.csv", function(error, water) {
         
@@ -184,7 +321,6 @@ var update = function(value) {
     
     default:
       console.log ('inside default')
-      state_original=1;
       //do nothing
       break;
     
@@ -207,7 +343,8 @@ var gs = graphScroll()
                   {cx: width - r, cy: height2 - r},
                   {cx: width/2,   cy: height2/2} ][i]
 
-      if (i>0) {console.log("updating: ", i); update(i)};
+      //if (i>0) {console.log("updating: ", i); update(i)};
+      console.log("updating: ", i); update(i)
       
       });
 
@@ -228,7 +365,7 @@ function filterData(startYear, endYear){
   // filter by years
   fDataset=dataset.filter(function(d){return d.year>=startYear && d.year<=endYear});
   //ready to draw circles
-  drawVis(fDataset);
+  drawVis_scatter(fDataset);
   
 };
 

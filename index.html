@@ -148,8 +148,14 @@
       <hr class="featurette-divider">
 
             <div class="row featurette">
-        <div class="col-md-7">
-          <h2 class="featurette-heading">Exploratory Data Analysis</span></h2>
+        <div class="col-md-5">
+          <h2 class="featurette-heading">Exploratory Data Analysis</h2>
+          We explore the data with focus on the response variable: 'Operational Status', which is categorical with 3 possible values:
+            <ul>
+              <li>functional - the waterpoint is operational and there are no repairs needed</li>
+              <li>functional needs repair - the waterpoint is operational, but needs repairs</li>
+              <li>non functional - the waterpoint is not operational</li>
+            </ul>
         </div>
         <div class="col-md-5">
           <!--<img class="featurette-image img-fluid center-block" data-src="holder.js/500x500/auto" alt="Generic placeholder image">-->
@@ -158,6 +164,9 @@
         <div id='container'>
         <div id='sections'>
           <div><!--0-->
+            
+          </div>
+          <div><!--1-->
           <h2 class="featurette-heading"><span class="text-muted">Waterpoints by Operational Status</span></h2>
           <p class="lead">The majority of wells, 54.31% are categorized as functional, followed by 38.42% non-functional wells, with a small proportion 7.27% of wells needing repair.</p>
           <p></p>
@@ -209,7 +218,7 @@
           </table>
           </div>
 
-          <!--1-->
+          <!--2-->
           <div>
             <h2 class="featurette-heading"><span class="text-muted">Operational Status by Construction Year</span></h2>
             For temporal trends, we examined operational status by construction year.  Newer wells tend to show a higher proportion of functional status and older wells tend to have higher proportions of non-functional status. What is somewhat surprising is that wells in need of repair do not show a clear pattern with respect to year built. We also note that the time in which the proportion of functional to non-functional wells intersect is between 1985 and 1990, possibly indicating that an average well life may be around 25 years
